@@ -1,77 +1,143 @@
-import React, {useEffect, useState} from 'react'
-import ItemCard from '../Components/ItemCard';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
+import { 
+  Search, 
+  Filter, 
+  Star, 
+  ShoppingBag, 
+  Tag, 
+  Box, 
+  CheckCircle2 
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const AllItems = ()=>{
-    const [items, setItems] = useState([]);
-    useEffect(()=>{
-        const fetchItems = async () =>{
-            try{
-                const response = await fetch('https://dummyjson.com/products',{
+const AllItems = () => {
+  const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
-                });
-                if(response.ok){
-                    const data = await response.json();
-                    setItems(data.products);
-                    // setTotalPages(data.totalPages);
-                    // console.log("data",data);
-                }
-            }
-            catch(error){
-                console.log("Error Fetching Projects ",error);
-            }
-        };
-        fetchItems();
-    },[])
-    return (
-        <>
-        <Navbar />
-        {/* Div with the labels for the displayed information */}
-        <div className="w-full text-sm text-gray-700 font-semibold mb-2">
-            <div className="grid grid-cols-2 gap-4">
-                <div>ID</div>
-                <div>Description</div>
-                <div>Availability</div>
-                <div>Category</div>
-                <div>Price</div>
-                <div>Rating</div>
-                <div>Stock</div>
-            </div>
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await fetch('https://dummyjson.com/products');
+        if (response.ok) {
+          const data = await response.json();
+          setItems(data.products);
+          setFilteredItems(data.products);
+        }
+      } catch (error) {
+        console.error("Error Fetching Products", error);
+      }
+    };
+    fetchItems();
+  }, []);
+
+  // Search and filter functionality
+  useEffect(() => {
+    const results = items.filter(item => 
+      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredItems(results);
+  }, [searchTerm, items]);
+
+  return (
+    <>
+    <Navbar />
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="container mx-auto">
+        {/* Search and Filter Section */}
+        <div className="mb-8 flex justify-between items-center">
+          <div className="relative flex-grow mr-4">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input 
+              type="text" 
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 w-full border-gray-300 focus:ring-2 focus:ring-blue-500 rounded-lg"
+            />
+          </div>
+          <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+            <Filter className="mr-2 h-4 w-4" />
+            Filters
+          </button>
         </div>
-        <div>
-          <h1 className='AllItems'>All Items</h1>
-          {items.length === 0 ? (
-            <p>No Items found.</p>
-          ) : (
-            <div>
-              {items.map((item) => (
-                <ItemCard key={item._id} obj={item}/>
-              ))}
+
+        {/* Items Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredItems.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-xl text-gray-500">No items found.</p>
             </div>
+          ) : (
+            filteredItems.map((item) => (
+              <div 
+                key={item.id} 
+                className="bg-white p-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+              >
+                <div className="relative">
+                  <img 
+                    src={item.thumbnail} 
+                    alt={item.title} 
+                    className="w-full h-48 object-cover rounded-t-lg"
+                  />
+                  <span className="absolute top-2 right-2 bg-blue-500 text-white text-xs py-1 px-2 rounded-full">
+                    {item.category}
+                  </span>
+                </div>
+
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold truncate">{item.title}</h2>
+                    <div className="flex items-center text-yellow-500">
+                      <Star className="h-5 w-5 mr-1" fill="currentColor" />
+                      <span>{item.rating.toFixed(1)}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <div className="flex items-center">
+                      <Tag className="h-4 w-4 mr-2 text-blue-500" />
+                      <span>${item.price}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Box className="h-4 w-4 mr-2 text-green-500" />
+                      <span>Stock: {item.stock}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <span 
+                      className={`flex items-center px-2 py-1 rounded-full text-xs ${item.stock > 0 ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}
+                    >
+                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                      {item.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                    </span>
+                    <button 
+                      className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100"
+                    >
+                      <ShoppingBag className="h-4 w-4 mr-2" />
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
           )}
         </div>
-        {/* <CreateProject onNewProjectAdded={handleNewProjectAdded}/>
-        <div className="buttonsDiv" style={{display:'flex',justifyContent:'center'}}>
-          <button
-          onClick={handlePrevPage}
-          disabled={page === 1}
-          style={page === 1 ? hoverButtonStyle : buttonStyle}
-          >
-          Previous Page
-          </button>
-          <span style={{marginTop:'15px'}}>
-            Page {page} of {totalPages}
-          </span>
-          <button
-            onClick={handleNextPage}
-            disabled={page === totalPages}
-            style={page === totalPages ? hoverButtonStyle : buttonStyle}
-          >
-            Next Page
-          </button>
-        </div> */}
-        </>
-    );
+
+        {/* Pagination (optional) */}
+        {filteredItems.length > 0 && (
+          <div className="flex justify-center mt-8 space-x-4">
+            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">Previous</button>
+            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">Next</button>
+          </div>
+        )}
+      </div>
+    </div>
+    </>
+  );
 }
 
 export default AllItems;
