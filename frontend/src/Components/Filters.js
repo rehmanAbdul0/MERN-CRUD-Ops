@@ -23,7 +23,7 @@ const FilterComponent = ({ categories, onFilter }) => {
     <div className="relative">
       <button
         onClick={() => setShowFilters((prev) => !prev)}
-        className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100"
+        className="flex items-center bg-yellow-400 text-black px-4 py-2 border border-gray-300 rounded-lg hover:bg-yellow-500"
       >
         <Filter className="mr-2 h-4 w-4" />
         Filters
