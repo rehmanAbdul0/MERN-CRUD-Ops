@@ -418,7 +418,7 @@ const UploadProductPage = () => {
                     accept="image/*"
                     multiple
                     onChange={(e) => handleImageUpload(e, 'images')}
-                    className="w-full border-2 border-blue-100 rounded-lg p-3 focus:border-blue-500 transition"
+                    className="w-full border-2 border-blue-100 rounded-lg p-3 focus:border-blue-500 transition" 
                   />
                 </div>
               </div>
