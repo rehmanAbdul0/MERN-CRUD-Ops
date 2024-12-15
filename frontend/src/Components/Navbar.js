@@ -25,7 +25,7 @@ const Navbar = () => {
     { 
       icon: <List className="mr-2" />, 
       label: 'Read', 
-      href: '/list' 
+      href: '/products' 
     }
   ];
 
