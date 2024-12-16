@@ -54,10 +54,10 @@ const UploadProductPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('https://dummyjson.com/products');
+        const response = await fetch('https://dummyjson.com/products/category-list');
         const data = await response.json();
-        const uniqueCategories = [...new Set(data.products.map(product => product.category))];
-        setCategories(uniqueCategories);
+        // const uniqueCategories = [...new Set(data.products.map(product => product.category))];
+        setCategories(data);
       } catch (err) {
         console.error('Error fetching categories:', err);
       }
@@ -266,12 +266,12 @@ const UploadProductPage = () => {
                   required
                 >
                   <option value="">Select Category</option>
+                  <option value="add-new" className="bg-green-500 text-white">+ Add New Category</option>
                   {categories.map((category) => (
                     <option key={category} value={category}>
                       {category}
                     </option>
                   ))}
-                  <option value="add-new">+ Add New Category</option>
                 </select>
                 {isAddingCategory && (
                   <div className="mt-4">

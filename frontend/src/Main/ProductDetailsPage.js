@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { Star, Box, Truck, ShieldCheck, Percent, ArrowLeft, Gift, CircleUser } from "lucide-react";
 import Navbar from '../Components/Navbar';
+import EditProductButton from '../Components/EditProductModal';
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
@@ -150,6 +151,8 @@ const ProductDetailsPage = () => {
                 <span>Back to Products</span>
               </button>
             </div>
+            {/* Edit Button */}
+            <EditProductButton productDetails={productDetails} setProductDetails={setProductDetails} />
           </div>
         </div>
           {/* New Additional Section */}
@@ -159,15 +162,15 @@ const ProductDetailsPage = () => {
             <div className="bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <ShieldCheck className="mx-auto w-16 h-16 text-blue-500 mb-4" />
               <h3 className="font-bold text-xl text-gray-800 mb-2">Warranty Protection</h3>
-              <p className="text-gray-600">1-Year Manufacturer Warranty</p>
+              <p className="text-gray-600">{productDetails.warrantyInformation}</p>
               <p className="text-sm text-gray-500 mt-2">Comprehensive coverage for your product</p>
             </div>
 
-            {/* Free Shipping */}
+            {/* Shipping */}
             <div className="bg-white rounded-xl p-6 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <Truck className="mx-auto w-16 h-16 text-green-500 mb-4" />
               <h3 className="font-bold text-xl text-gray-800 mb-2">Free Shipping</h3>
-              <p className="text-gray-600">Worldwide Delivery</p>
+              <p className="text-gray-600">{productDetails.shippingInformation}</p>
               <p className="text-sm text-gray-500 mt-2">Free shipping on orders over $100</p>
             </div>
 
@@ -191,38 +194,6 @@ const ProductDetailsPage = () => {
                 </span>
               </div>
             </div>
-
-            {/* Mock Review Cards */}
-            {/* <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 rounded-xl p-6">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-blue-200 rounded-full mr-4"></div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800">Emily Johnson</h4>
-                    <div className="flex text-yellow-500">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current" />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p className="text-gray-600 italic">"Absolutely love this product! Exceeded all my expectations."</p>
-              </div>
-              <div className="bg-gray-100 rounded-xl p-6">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-green-200 rounded-full mr-4"></div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800">Michael Smith</h4>
-                    <div className="flex text-yellow-500">
-                      {[...Array(4)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current" />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p className="text-gray-600 italic">"Great quality and value for money. Highly recommend!"</p>
-              </div>
-            </div> */}
             <div className="grid md:grid-cols-2 gap-6">
               {productDetails.reviews.map((review, index) => (
                 <div key={index} className="bg-gray-100 rounded-xl p-6">
