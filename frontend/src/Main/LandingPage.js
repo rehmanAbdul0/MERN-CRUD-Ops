@@ -104,7 +104,7 @@ const LandingPage = () => {
                 View Products
               </Button>
             </Link>
-            <Link to="/add-product">
+            <Link to="/create">
               <Button variant="outline" size="lg" className="shadow-md">
                 Add New Product
               </Button>

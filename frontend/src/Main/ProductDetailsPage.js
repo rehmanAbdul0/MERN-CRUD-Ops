@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Star, Box, Truck, ShieldCheck, Percent, ArrowLeft, Gift, CircleUser } from "lucide-react";
 import Navbar from '../Components/Navbar';
 import EditProductButton from '../Components/EditProductModal';
+import DeleteProductButton from '../Components/DeleteProductButton';
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
@@ -151,8 +152,14 @@ const ProductDetailsPage = () => {
                 <span>Back to Products</span>
               </button>
             </div>
-            {/* Edit Button */}
+            {/* Edit & Delete Button */}
+            <div className="flex space-x-4 pt-4">
             <EditProductButton productDetails={productDetails} setProductDetails={setProductDetails} />
+            <DeleteProductButton 
+              productId={productDetails.id}
+              productTitle={productDetails.title}
+            />
+            </div>
           </div>
         </div>
           {/* New Additional Section */}

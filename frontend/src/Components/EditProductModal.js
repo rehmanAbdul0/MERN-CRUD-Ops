@@ -1,4 +1,3 @@
-// components/EditProductButton.jsx
 import React, { useState } from 'react';
 import { 
   Dialog, 
@@ -13,6 +12,7 @@ import { Label } from '../Components/UI/Label';
 import { Button } from '../Components/UI/Button';
 import { Pencil } from 'lucide-react';
 import { toast } from 'sonner';
+import EditButton from './EditButton';
 
 const EditProductButton = ({ productDetails, setProductDetails }) => {
   const [showModal, setShowModal] = useState(false);
@@ -83,6 +83,7 @@ const EditProductButton = ({ productDetails, setProductDetails }) => {
         setProductDetails(updatedProduct);
         setShowModal(false);
         toast.success('Product updated successfully!');
+        
       } else {
         toast.error('Failed to update product');
       }
@@ -96,13 +97,13 @@ const EditProductButton = ({ productDetails, setProductDetails }) => {
 
   return (
     <>
-      <Button 
+      <EditButton 
         onClick={() => setShowModal(true)} 
-        className="flex items-center gap-2 w-full h-12 text-lg"
+        // className="flex items-center gap-2 w-full h-12 text-lg"
       >
         <Pencil size={25} />
         Edit Product
-      </Button>
+      </EditButton>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
         <DialogContent className="sm:max-w-[600px]">
@@ -130,17 +131,18 @@ const EditProductButton = ({ productDetails, setProductDetails }) => {
 
             {/* Description */}
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
-                Description
-              </Label>
-              <Input
-                id="description"
-                name="description"
-                value={editForm.description}
-                onChange={handleInputChange}
-                className="col-span-3"
-              />
-            </div>
+            <Label htmlFor="description" className="text-right">
+              Description
+            </Label>
+            <textarea
+              id="description"
+              name="description"
+              value={editForm.description}
+              onChange={handleInputChange}
+              className="col-span-3 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              rows="4"
+            />
+          </div>
 
             {/* Category */}
             <div className="grid grid-cols-4 items-center gap-4">
@@ -372,15 +374,21 @@ const EditProductButton = ({ productDetails, setProductDetails }) => {
               <Label htmlFor="availabilityStatus" className="text-right">
                 Availability
               </Label>
-              <Input
+              <select
                 id="availabilityStatus"
                 name="availabilityStatus"
-                value={editForm.availabilityStatus}
+                value={editForm.availabilityStatus || ""} // Ensure default value to avoid uncontrolled warning
                 onChange={handleInputChange}
-                className="col-span-3"
-              />
+                className="col-span-3 rounded-lg border-2 bg-gray-50 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 shadow-md transition-all duration-200 ease-in-out"
+              >
+                <option value="" disabled>
+                  Select Availability
+                </option>
+                <option value="In Stock">In Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
+              </select>
             </div>
-
+            
             {/* Return Policy */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="returnPolicy" className="text-right">
